@@ -1,4 +1,3 @@
-"use strict";
 
 var canvas = new Canvas('main_canvas');
 var car = new Car();
