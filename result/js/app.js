@@ -5,7 +5,7 @@ var car = new Car();
 
 
 var roadMap = {
-    distance: 1000
+    distance: 10000 //10 = 1 meter
 }
 var road = new Road(roadMap);
 
@@ -25,13 +25,16 @@ var render = new Render(canvas, objects, objectsPositions);
   
 
 // The main game loop
+var goneDistance = 0;
+
 var main = () => {
 	var now = Date.now();
 	var delta = now - then;
 
 //	update(delta / 1000);
 	handling.update();
-	render.run();
+	render.run(goneDistance);
+    goneDistance += 100*delta/1000;
 
 	then = now;
 

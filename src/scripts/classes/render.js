@@ -5,9 +5,9 @@ class Render {
         this.objects = objects;
         this.objectsPositions = objectsPositions;
     }
-    run() {
+    run(gDistance) {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+        var goneDistance = 0;
         objects.forEach((obj)=>{
             switch(obj.id){
                 case 'car':
@@ -16,7 +16,8 @@ class Render {
                     let carR = this.objectsPositions.car.coords[2];
                     obj.rend(this.ctx, carX, carY, carR);
                 case 'road':
-                    obj.rend(this.ctx);
+                    obj.rend(this.ctx, gDistance);
+                    
             }
         });
     }

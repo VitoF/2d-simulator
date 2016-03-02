@@ -96,9 +96,9 @@ class Render {
         this.objects = objects;
         this.objectsPositions = objectsPositions;
     }
-    run() {
+    run(gDistance) {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+        var goneDistance = 0;
         objects.forEach((obj)=>{
             switch(obj.id){
                 case 'car':
@@ -107,7 +107,8 @@ class Render {
                     let carR = this.objectsPositions.car.coords[2];
                     obj.rend(this.ctx, carX, carY, carR);
                 case 'road':
-                    obj.rend(this.ctx);
+                    obj.rend(this.ctx, gDistance);
+                    
             }
         });
     }
@@ -118,27 +119,21 @@ class Road {
         this.width = 400;
         this.slotHeight = 100;
         this.distance = roadMap.distance;
-        this.slotsNumber = this.distance/this.slotHeight;
-        this.currentSlot = 0;
-        this.goneDistance = 0;
         
         this.imgReady = false;
         this.img = new Image();
         this.img.onload = () => {this.imgReady = true;}
         this.img.src = '../images/road.png';
     }
-    rend(ctx,wentDistance){
-        this.goneDistance = goneDistance;
-        this.currentSlot = Math.ceil(goneDistance/this.slotHeight) <= this.slotsNumber-1 ? 
-                            Math.ceil(goneDistance/this.slotHeight) :
-                            this.slotsNumber - 1;
+    rend(ctx, gDistance){console.log(gDistance);
         
         if (this.imgReady){
-            for(let i=currentSlot; i<=currentSlot+8; i++){
-                let yi=
+            var currentSlotY = 600 + (gDistance - Math.floor(gDistance/100)) - 100;
+            for(let i=0; i<7; i++){
+                let yi = currentSlotY - i*100;
+                ctx.drawImage(this.img, 200, yi);
             }
-            
-            ctx.drawImage(this.img, 200, 0);
+
         }
         
         
