@@ -1,5 +1,6 @@
 class Handling {
-    constructor() {
+    constructor(objCurData) {
+        this.objCurData = objCurData;
         this.keysDown = {} ;
         var that = this;
         addEventListener("keydown", function (e) {
@@ -8,25 +9,25 @@ class Handling {
 
         addEventListener("keyup", function (e) {
             delete that.keysDown[e.keyCode];
-            objectsPositions.car.coords[2] = 1;
+            that.objCurData.car.coords[2] = 1;
         }, false);
     }
     update(){
         if (38 in this.keysDown) { // Player holding up
-            objectsPositions.car.coords[1] -= objectsPositions.car.speed * 0.03;
-            objectsPositions.car.coords[2] = 3;
+            this.objCurData.car.coords[1] -= this.objCurData.car.speed * 0.03;
+            this.objCurData.car.coords[2] = 3;
         }
         if (40 in this.keysDown) { // Player holding down
-            objectsPositions.car.coords[1] += objectsPositions.car.speed * 0.03;
-            objectsPositions.car.coords[2] = 4;
+            this.objCurData.car.coords[1] += this.objCurData.car.speed * 0.03;
+            this.objCurData.car.coords[2] = 4;
         }
         if (37 in this.keysDown) { // Player holding left
-            objectsPositions.car.coords[0] -= objectsPositions.car.speed * 0.03;
-            objectsPositions.car.coords[2] = 0;
+            this.objCurData.car.coords[0] -= this.objCurData.car.speed * 0.03;
+            this.objCurData.car.coords[2] = 0;
         }
         if (39 in this.keysDown) { // Player holding right
-            objectsPositions.car.coords[0] += objectsPositions.car.speed * 0.03;
-            objectsPositions.car.coords[2] = 2;
+            this.objCurData.car.coords[0] += this.objCurData.car.speed * 0.03;
+            this.objCurData.car.coords[2] = 2;
         }
     }
 }

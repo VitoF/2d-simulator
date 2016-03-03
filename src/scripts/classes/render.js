@@ -6,9 +6,8 @@ class Render {
         this.objectsPositions = objectsPositions;
     }
     run(gDistance) {
-        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-        var goneDistance = 0;
-        objects.forEach((obj)=>{
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.objects.forEach((obj)=>{
             switch(obj.id){
                 case 'car':
                     let carX = this.objectsPositions.car.coords[0];

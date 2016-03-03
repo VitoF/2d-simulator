@@ -1,8 +1,9 @@
 class Car {
-    constructor() {
+    constructor(data) {
         this.id = 'car';
-        this.width = 40;
-        this.height = 60;
+        this.width = data.iw;
+        this.height = data.ih;
+        this.speed = data.speed;
         this.x = 0;
         this.y = 0;
         this.calculateCoords();
