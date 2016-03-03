@@ -1,0 +1,4 @@
+HITCHES:
+    0,1,2 - puddles (left, center, right)
+    3,4,5 - police cars (alone left, center, right)
+    

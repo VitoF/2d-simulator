@@ -3,25 +3,19 @@ class MainApp {
         this.carData = dataObj.car[car];
         this.roadData = dataObj.road[road];
         
-        
-        this.objCurData = {
-            car: {
-                coords: [400,300,1],
-                speed: 100
-            }
-        }
-        
         this.canvas = new Canvas('main_canvas');
         this.car = new Car(this.carData);
         this.road = new Road(this.roadData);
-        this.handling = new Handling(this.objCurData);
+        this.handling = new Handling(this.car);
+        this.collision = new Collision(this.roadData.hitches);
         
         var objects = [this.road, this.car];
         this.roadSpeed = this.roadData.speed;
         
-        this.render = new Render(this.canvas, objects, this.objCurData);
+        this.render = new Render(this.canvas, objects);
         
         this.goneDistance = 0;
+        
         
         // Cross-browser support for requestAnimationFrame
         requestAnimationFrame = window.requestAnimationFrame ||
@@ -37,7 +31,8 @@ class MainApp {
             
             this.handling.update();
             this.render.run(this.goneDistance);
-            document.getElementById('goneDistance').innerHtml = this.goneDistance;
+            this.collision.listenCollision(this.car.xl, this.car.xr, this.car.yt, this.goneDistance);
+            document.getElementById('gone_distance').innerHTML = Math.floor(this.goneDistance/10);
             this.goneDistance += (this.roadSpeed*10/3.6)*(delta/1000); //10px = 1m & roadSpeed in km/h
 
             then = now;
@@ -47,8 +42,8 @@ class MainApp {
         };        
 
         var then = Date.now();
+//        var oldCarY = this.car.y;
         main();
-        console.log('here');
     }
     
     run() {
