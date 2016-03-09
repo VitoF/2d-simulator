@@ -32,8 +32,10 @@ class MainApp {
             this.handling.update();
             this.render.run(this.goneDistance);
             this.collision.listenCollision(this.car.xl, this.car.xr, this.car.yt, this.goneDistance);
-            document.getElementById('gone_distance').innerHTML = Math.floor(this.goneDistance/10);
-            this.goneDistance += (this.roadSpeed*10/3.6)*(delta/1000); //10px = 1m & roadSpeed in km/h
+            if (!this.collision.isCollision){
+                document.getElementById('gone_distance').innerHTML = Math.floor(this.goneDistance/10);
+                this.goneDistance += (this.roadSpeed*10/3.6)*(delta/1000); //10px = 1m & roadSpeed in km/h
+            }
 
             then = now;
 

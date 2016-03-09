@@ -1,5 +1,5 @@
 class Handling {
-    constructor(car) {console.log(car);
+    constructor(car) {
         this.car = car;
         this.keysDown = {} ;
         var that = this;

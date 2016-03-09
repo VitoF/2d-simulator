@@ -1,4 +1,16 @@
 HITCHES:
     0,1,2 - puddles (left, center, right)
-    3,4,5 - police cars (alone left, center, right)
+    3,4,5 - police cars (left, center, right)
+    6,7 -trucks
+    
+    
+    
+                "2": "4",
+                "3": "5",
+                "4": "6",
+                "5": "7",
+                "6": "8",
+                "15": "1",
+                "19": "2",
+                "20": "5"
     
