@@ -1,4 +1,11 @@
+ROAD:
+    1 position = 60px; plus 100px each side;
+    1 slot height = 100px;
+
+
 HITCHES:
+    1 position = 45px;
+
     0,1,2 - puddles (left, center, right)
     3,4,5 - police cars (left, center, right)
     6,7 -trucks
