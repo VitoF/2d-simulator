@@ -1,0 +1,73 @@
+{
+    "car": {
+        "default": {
+            "name": "default",
+            "pw": "30",
+            "ph": "60",
+            "AverageSpeed": "100",
+            "speed": "0",
+            "iw": "40",
+            "ih": "60"
+        }
+    },
+    "road": {
+        "default": {
+            "texture": "road.png",
+            "hTexture": "hitches.png",
+            "lTexture": "default_land.jpg",
+            "distance": "1000",
+            "speed": "100",
+            "slotsNumber": "100",
+            "slots": {
+                "10": {
+                    "position": 1,
+                    "type": 1
+                },
+                "11": {
+                    "position": 0,
+                    "type": 1
+                },
+                "12": {
+                    "position": 0,
+                    "type": 0
+                },
+                "13": {
+                    "position": 1,
+                    "type": 0
+                }
+                
+            }
+        }
+    },
+    "hitches": {
+        "1": [
+            {
+                "type": "truck",
+                "position": 0,
+                "misc": 1
+            }
+        ],
+        "3": [
+            {
+                "type": "excavator",
+                "position": 0
+            }
+        ],
+        "10": [
+            {
+                "type": "police",
+                "position": 6
+            },
+            {
+                "type": "police",
+                "position": 0,
+                "misc": 1
+            },
+            {
+                "type": "police",
+                "position": 3,
+                "misc": 1
+            }
+        ]
+    }
+}

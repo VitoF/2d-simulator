@@ -1,97 +1,55 @@
 class Collision {
-    constructor (hitchesData){
-        this.hitchesData = hitchesData;
+    constructor (roadSlots, hitchesSlots, hitchesItems){
+        this.roadSlots = roadSlots;
+        this.hitchesSlots = hitchesSlots;
+        this.hitchesItems = hitchesItems;
         this.isCollision = false;
+        this.typeCollision = "none";
     }
-    listenCollision (carXl, carXr, carY, gDistance){
+    listenCollision (curCarSlot, goneDistance, carObj){
         this.isCollision = false;
-        var carSlot = Math.floor((600 - carY + gDistance)/100);
-        if(carSlot in this.hitchesData){
-//            var hitchType = this.hitchesData[carSlot];
-            this.hitchesData[carSlot].forEach((v)=>{
-                switch (v.type){
-                    case "police":{
-                        let ColXL = 220 + v.position*45 + 20;
-                        let ColXR = 220 + v.position*45 + 20 + 60;
-                        let CarCurY = gDistance + 600 - carY;
-                        let ColYB = carSlot * 100 + 35;
-                        
-                        if (CarCurY >= ColYB && carXr >= ColXL && carXl <= ColXR){
-                            this.isCollision = true;
-                            this.collisionType = 4;
-                            console.log('collision');
-                        }
+        this.typeCollision = "none";
+        
+        var carX = carObj.x,
+            carY = carObj.y,
+            carX0 = carX + carObj.x0,
+            carX1 = carX + carObj.x1,
+            carY0 = carY + carObj.y0,
+            carY1 = carY + carObj.y1;
+        
+        //shock collision
+        var slot;
+        if (curCarSlot in this.hitchesSlots){  slot = curCarSlot; }
+        if (curCarSlot-1 in this.hitchesSlots){ slot = curCarSlot-1; }
+        if (curCarSlot in this.hitchesSlots || curCarSlot-1 in this.hitchesSlots){
+            
+            var slotX = this.roadSlots[slot].position * 60 + 100,
+                slotY = 500 - (slot*100 - goneDistance);
+            
+            this.hitchesSlots[slot].forEach((hi)=>{
+                var colAreaGot = this.hitchesItems[hi.type].collision.area;
+                
+                for(let i=0; i<colAreaGot.length; i++){
+                    let colX0 = slotX + colAreaGot[i].x0 + hi.position * 45,
+                        colX1 = slotX + colAreaGot[i].x1 + hi.position * 45,
+                        colY0 = slotY + colAreaGot[i].y0,
+                        colY1 = slotY + colAreaGot[i].y1;
+                    if (carY0 <= colY1 && carY1 >= colY0 && carX0 <= colX1 && carX1 >= colX0){
+                        this.isCollision = true;
+                        this.typeCollision = "shock";
+                        carObj.r = 5;
                     }
-                        break;
-                    case "truck":{
-                        let ColXL = 220 + v.position*45 + 15;
-                        let ColXR = 220 + v.position*45 + 20 + 185;
-                        let CarCurY = gDistance + 600 - carY;
-                        let ColYB = carSlot * 100 + 35;
-                        
-                        if (CarCurY >= ColYB && carXr >= ColXL && carXl <= ColXR){
-                            this.isCollision = true;
-                            this.collisionType = 4;
-                            console.log('collision');
-                        }
-                    }
-                        break;
-                    case "excavator":{
-                        let ColXL1 = 220 + v.position*45 + 15;
-                        let ColXR1 = 220 + v.position*45 + 20 + 100;
-                        let ColXL2 = 220 + v.position*45 + 15 + 195;
-                        let ColXR2 = 220 + v.position*45 + 20 + 230;
-                        let CarCurY = gDistance + 600 - carY;
-                        let ColYB = carSlot * 100 + 10;
-                        
-                        if ((CarCurY >= ColYB && carXr >= ColXL1 && carXl <= ColXR1) || 
-                        (CarCurY >= ColYB && carXr >= ColXL2 && carXl   <= ColXR2)){
-                            this.isCollision = true;
-                            this.collisionType = 4;
-                            console.log('collision');
-                        }
-                    }
-                        break;
                 }
             });
-            /*switch (hitchType){
-                case "3":{
-                    let colY = carSlot * 100 + 35;
-                    let colXl = 270;
-                    let colXr = 330;
-                    let carCurY = gDistance + 600 - carY;
-                    if (carCurY >= colY && carXr >= colXl && carXl <= colXr){
-                        this.isCollision = true;
-                        this.collisionType = 4;
-                        console.log('collision');
-                    }
-                }
-                    break;
-                case "4":{
-                    let colY = carSlot * 100 + 35;
-                    let colXl = 370;
-                    let colXr = 430;
-                    let carCurY = gDistance + 600 - carY;
-                    if (carCurY >= colY && carXr >= colXl && carXl <= colXr){
-                        this.isCollision = true;
-                        this.collisionType = 4;
-                        console.log('collision');
-                    }
-                }
-                    break;
-                case "5":{
-                    let colY = carSlot * 100 + 35;
-                    let colXl = 470;
-                    let colXr = 530;
-                    let carCurY = gDistance + 600 - carY;
-                    if (carCurY >= colY && carXr >= colXl && carXl <= colXr){
-                        this.isCollision = true;
-                        this.collisionType = 4;
-                        console.log('collision');
-                    }
-                }
-                    break;
-            }*/
         }
+        //turnover
+        var roadX0 = this.roadSlots[curCarSlot].position * 60 + 100,
+            roadX1 = roadX0 + this.roadSlots[curCarSlot].width;
+        if (carX0 < roadX0 || carX1 > roadX1){
+            this.isCollision = true;
+            this.typeCollision = "turnover";
+            carObj.r = 5;
+        }
+        
     }
 }

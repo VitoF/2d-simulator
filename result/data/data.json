@@ -1,56 +1,121 @@
 {
+    "handling": {
+        "default": {
+            "up": [38, 87],
+            "down": [40, 83],
+            "left": [37, 65],
+            "right": [39, 68],
+            "menu": [27]
+        }
+    },
     "car": {
         "default": {
-            "name": "default",
-            "pw": "30",
-            "ph": "60",
-            "AverageSpeed": "100",
-            "speed": "0",
-            "iw": "40",
-            "ih": "60"
+            "width": 30,
+            "height": 60,
+            "collision": {
+                "x0": -15,
+                "y0": 0,
+                "x1": 15,
+                "y1": 60
+            },
+            "texture": "car_default.png",
+            "textureCoords": {
+                "default": [5,0,30,60],
+                "left": [40,0,39,60],
+                "right": [80,0,39,60],
+                "up": [124,0,31,60],
+                "down": [165,0,30,60],
+                "wreckedShock": [196,0,42,60]
+            }
         }
     },
     "road": {
         "default": {
             "texture": "road.png",
-            "hTexture": "hitches.png",
-            "distance": "1000",
-            "speed": "100",
-            "slotsNumber": "100",
+            "lTexture": "default_land.jpg",
+            "distance": 1000,
+            "speed": 100,
+            "slotsNumber": 100,
             "slots": {
-                "0": "0"
-            },
-            "hitches": {
-                "1": [
-                    {
-                        "type": "truck",
-                        "position": 0,
-                        "misc": 1
-                    }
-                ],
-                "3": [
-                    {
-                        "type": "excavator",
-                        "position": 0
-                    }
-                ],
-                "10": [
-                    {
-                        "type": "police",
-                        "position": 6
-                    },
-                    {
-                        "type": "police",
-                        "position": 0,
-                        "misc": 1
-                    },
-                    {
-                        "type": "police",
-                        "position": 3,
-                        "misc": 1
-                    }
-                ]
+                "default": {
+                    "position": 2,
+                    "type": 0,
+                    "width": 360
+                },
+                "finish":{
+                    "position": 2,
+                    "type": 0,
+                    "width": 360
+                },
+                "10": {
+                    "type": 1
+                },
+                "13": {
+                    "type": 1
+                }
+                
             }
+        }
+    },
+    "hitches": {
+        "hTexture": "hitches.png",
+        "items": {
+            "truck":{
+                "width": 210,
+                "height": 42,
+                "tX": 5,
+                "tY": 54,
+                "collision": {
+                    "area": [
+                        {
+                            "x0": 0,
+                            "y0": 29,
+                            "x1": 210,
+                            "y1": 71
+                        }
+                    ],
+                    "colType": "shock"
+                }
+            },
+            "excavator":{
+                "width": 251,
+                "height": 88,
+                "tX": 7,
+                "tY": 155,
+                "collision": {
+                    "area": [
+                        {
+                            "x0": 0,
+                            "y0": 6,
+                            "x1": 118,
+                            "y1": 94
+                        },
+                        {
+                            "x0": 192,
+                            "y0": 51,
+                            "x1": 251,
+                            "y1": 94
+                        }
+                    ],
+                    "colType": "shock"
+                }
+            }
+        },
+        "slots": {
+            "5": [
+                {
+                    "type": "truck",
+                    "position": 1,
+                    "misc": 1
+                }
+            ],
+            "8": [
+                {
+                    "type": "excavator",
+                    "position": 2,
+                    "misc": 1
+                }
+            ]
         }
     }
 }

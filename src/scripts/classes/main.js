@@ -2,19 +2,24 @@ class MainApp {
     constructor(dataObj, car, road) {
         this.carData = dataObj.car[car];
         this.roadData = dataObj.road[road];
+        this.handData = dataObj.handling["default"];
+        this.hitchesData = dataObj.hitches;
+        this.pause = false;
         
         this.canvas = new Canvas('main_canvas');
         this.car = new Car(this.carData);
         this.road = new Road(this.roadData);
-        this.handling = new Handling(this.car);
-        this.collision = new Collision(this.roadData.hitches);
+        this.hitches = new Hitches(this.hitchesData, this.road);
+        this.handling = new Handling(this.car, this.handData, this);
+        this.collision = new Collision(this.roadData.slots, this.hitchesData.slots, this.hitchesData.items);
         
-        var objects = [this.road, this.car];
+        var objects = [this.road, this.car, this.hitches];
         this.roadSpeed = this.roadData.speed;
         
         this.render = new Render(this.canvas, objects);
         
         this.goneDistance = 0;
+        this.currentSlot = 0;
         
         
         // Cross-browser support for requestAnimationFrame
@@ -29,10 +34,15 @@ class MainApp {
             var now = Date.now();
             var delta = now - then;
             
+            this.currentSlot = Math.floor(this.goneDistance/100); //100 = slot height
+            this.currentCarSlot = Math.floor((this.goneDistance+600-this.car.y)/100);
+            
             this.handling.update();
-            this.render.run(this.goneDistance);
-            this.collision.listenCollision(this.car.xl, this.car.xr, this.car.yt, this.goneDistance);
-            if (!this.collision.isCollision){
+            
+            this.render.run(this.goneDistance, this.currentSlot);
+            
+            this.collision.listenCollision(this.currentCarSlot, this.goneDistance, this.car);
+            if (!this.pause && !this.collision.isCollision){
                 document.getElementById('gone_distance').innerHTML = Math.floor(this.goneDistance/10);
                 this.goneDistance += (this.roadSpeed*10/3.6)*(delta/1000); //10px = 1m & roadSpeed in km/h
             }
@@ -44,7 +54,6 @@ class MainApp {
         };        
 
         var then = Date.now();
-//        var oldCarY = this.car.y;
         main();
     }
     
