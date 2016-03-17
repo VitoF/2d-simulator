@@ -7,6 +7,26 @@ class Canvas {
         this.height = height || 600;
         this.canvas.width = this.width;
         this.canvas.height = this.height;
+        
+        this.pauseImgReady = false;
+        this.pauseImg = new Image();
+        this.pauseImg.onload = () => {this.pauseImgReady = true;}
+        this.pauseImg.src = '../images/pause_mode.png';
+    }
+    pauseMode(){
+        if (this.pauseImgReady){
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillRect(0,0,800,600);
+            this.ctx.drawImage(this.pauseImg, 210, 240);
+        }
+        
+//        var pauseImg = new Image(); var that = this;
+////        pauseImg.src = '../images/pause_mode.png';
+//        pauseImg.onload = () => {//console.log('ddd');
+////            this.ctx.fillStyle = 'red';
+//            that.ctx.fillRect(20,20,100,50);
+////            this.ctx.drawImage(pauseImg, 20, 20);
+//        }
     }
 }
 class Car {
@@ -52,6 +72,9 @@ class Car {
                     break;
                 case 5:
                     rot = "wreckedShock"; syncX = 0;
+                    break;
+                case 6:
+                    rot = "wreckedTurn"; syncX = 0;
                     break;
                 default:
                     rot = "default"; syncX = 0;
@@ -109,12 +132,14 @@ class Collision {
             });
         }
         //turnover
-        var roadX0 = this.roadSlots[curCarSlot].position * 60 + 100,
-            roadX1 = roadX0 + this.roadSlots[curCarSlot].width;
-        if (carX0 < roadX0 || carX1 > roadX1){
-            this.isCollision = true;
-            this.typeCollision = "turnover";
-            carObj.r = 5;
+        if (curCarSlot in this.roadSlots){
+            var roadX0 = this.roadSlots[curCarSlot].position * 60 + 100,
+                roadX1 = roadX0 + this.roadSlots[curCarSlot].width;
+            if (carX0 < roadX0 || carX1 > roadX1){
+                this.isCollision = true;
+                this.typeCollision = "turnover";
+                carObj.r = 6;
+            }
         }
         
     }
@@ -183,7 +208,7 @@ class Handling {
                 }
             });
             this.handKeys.menu.forEach((key)=>{
-                if (key == e.keyCode) { // Player holding PAUSE
+                if (key == e.keyCode) { // Player pressed PAUSE
                     mainAppObj.pause = mainAppObj.pause === false ? true : false;
                     this.moveUp = false;
                     this.moveDown = false;
@@ -278,7 +303,7 @@ class MainApp {
         this.roadData = dataObj.road[road];
         this.handData = dataObj.handling["default"];
         this.hitchesData = dataObj.hitches;
-        this.pause = false;
+        this.pause = true;
         
         this.canvas = new Canvas('main_canvas');
         this.car = new Car(this.carData);
@@ -316,9 +341,13 @@ class MainApp {
             this.render.run(this.goneDistance, this.currentSlot);
             
             this.collision.listenCollision(this.currentCarSlot, this.goneDistance, this.car);
-            if (!this.pause && !this.collision.isCollision){
+            if (!this.pause && !this.collision.isCollision && this.goneDistance < (this.road.distance*10 + 70)){
                 document.getElementById('gone_distance').innerHTML = Math.floor(this.goneDistance/10);
                 this.goneDistance += (this.roadSpeed*10/3.6)*(delta/1000); //10px = 1m & roadSpeed in km/h
+            }else if(this.goneDistance >= (this.road.distance*10 + 70) && this.car.y >= -this.car.height){
+                this.car.y -= this.roadSpeed * 0.08;
+            }else if(this.pause){
+                this.canvas.pauseMode();
             }
 
             then = now;
@@ -366,6 +395,8 @@ class Road {
         
         this.slotsNumber = roadData.slotsNumber;
         this.slots = this.modifySlots(roadData.slots);
+        
+        this.signs = roadData.signs;
         
         this.texture = roadData.texture;
         this.lTexture = roadData.lTexture;
@@ -433,7 +464,7 @@ class Road {
             //drawing road
             for (let i=0; i<7; i++){
                 //drawing road slots
-                let leftPos, slotWidth;
+                let leftPos;
                 
                 if ((this.currentSlot+i) in this.slots){
                     leftPos = 100 + this.slots[(this.currentSlot+i)].position * 60;
@@ -454,6 +485,26 @@ class Road {
                 }else{
                     leftPos = 220;
                     ctx.drawImage(this.img, 0, 0, this.width, this.slotHeight, leftPos, (curSlotY-i*this.slotHeight), this.width, this.slotHeight);
+                }
+                
+                //draw start and finish
+                if ((this.currentSlot+i) == 5){
+                    let signLeftPos = leftPos + (this.slots[(this.currentSlot+i)].width - this.signs.start[2])/2,
+                        signTopPos = curSlotY + (100 - this.signs.start[3])/2;
+                        
+                    ctx.drawImage(this.img, this.signs.start[0], this.signs.start[1],
+                                          this.signs.start[2], this.signs.start[3],
+                                          signLeftPos, (signTopPos-i*this.slotHeight),
+                                          this.signs.start[2], this.signs.start[3]);
+                }
+                if ((this.currentSlot+i) == this.slotsNumber-1){
+                    let signLeftPos = leftPos + (this.slots[(this.currentSlot+i)].width - this.signs.finish[2])/2,
+                        signTopPos = curSlotY + (100 - this.signs.finish[3])/2;
+                        
+                    ctx.drawImage(this.img, this.signs.finish[0], this.signs.finish[1],
+                                          this.signs.finish[2], this.signs.finish[3],
+                                          signLeftPos, (signTopPos-i*this.slotHeight),
+                                          this.signs.finish[2], this.signs.finish[3]);
                 }
             }
         }

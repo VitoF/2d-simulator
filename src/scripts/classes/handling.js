@@ -62,7 +62,7 @@ class Handling {
                 }
             });
             this.handKeys.menu.forEach((key)=>{
-                if (key == e.keyCode) { // Player holding PAUSE
+                if (key == e.keyCode) { // Player pressed PAUSE
                     mainAppObj.pause = mainAppObj.pause === false ? true : false;
                     this.moveUp = false;
                     this.moveDown = false;

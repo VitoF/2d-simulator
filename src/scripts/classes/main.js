@@ -4,7 +4,7 @@ class MainApp {
         this.roadData = dataObj.road[road];
         this.handData = dataObj.handling["default"];
         this.hitchesData = dataObj.hitches;
-        this.pause = false;
+        this.pause = true;
         
         this.canvas = new Canvas('main_canvas');
         this.car = new Car(this.carData);
@@ -42,9 +42,13 @@ class MainApp {
             this.render.run(this.goneDistance, this.currentSlot);
             
             this.collision.listenCollision(this.currentCarSlot, this.goneDistance, this.car);
-            if (!this.pause && !this.collision.isCollision){
+            if (!this.pause && !this.collision.isCollision && this.goneDistance < (this.road.distance*10 + 70)){
                 document.getElementById('gone_distance').innerHTML = Math.floor(this.goneDistance/10);
                 this.goneDistance += (this.roadSpeed*10/3.6)*(delta/1000); //10px = 1m & roadSpeed in km/h
+            }else if(this.goneDistance >= (this.road.distance*10 + 70) && this.car.y >= -this.car.height){
+                this.car.y -= this.roadSpeed * 0.08;
+            }else if(this.pause){
+                this.canvas.pauseMode();
             }
 
             then = now;

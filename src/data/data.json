@@ -5,7 +5,7 @@
             "down": [40, 83],
             "left": [37, 65],
             "right": [39, 68],
-            "menu": [27]
+            "menu": [27, 13]
         }
     },
     "car": {
@@ -25,7 +25,8 @@
                 "right": [80,0,39,60],
                 "up": [124,0,31,60],
                 "down": [165,0,30,60],
-                "wreckedShock": [196,0,42,60]
+                "wreckedShock": [196,0,42,60],
+                "wreckedTurn": [5,60,30,60]
             }
         }
     },
@@ -33,9 +34,13 @@
         "default": {
             "texture": "road.png",
             "lTexture": "default_land.jpg",
-            "distance": 1000,
+            "distance": 300,
             "speed": 100,
-            "slotsNumber": 100,
+            "slotsNumber": 30,
+            "signs": {
+                "start": [380,7,169,38],
+                "finish": [380,47,175,36]
+            },
             "slots": {
                 "default": {
                     "position": 2,
@@ -102,7 +107,7 @@
             }
         },
         "slots": {
-            "5": [
+            "10": [
                 {
                     "type": "truck",
                     "position": 1,

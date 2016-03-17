@@ -42,6 +42,9 @@ class Car {
                 case 5:
                     rot = "wreckedShock"; syncX = 0;
                     break;
+                case 6:
+                    rot = "wreckedTurn"; syncX = 0;
+                    break;
                 default:
                     rot = "default"; syncX = 0;
             }

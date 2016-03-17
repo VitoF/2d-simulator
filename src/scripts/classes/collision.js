@@ -43,12 +43,14 @@ class Collision {
             });
         }
         //turnover
-        var roadX0 = this.roadSlots[curCarSlot].position * 60 + 100,
-            roadX1 = roadX0 + this.roadSlots[curCarSlot].width;
-        if (carX0 < roadX0 || carX1 > roadX1){
-            this.isCollision = true;
-            this.typeCollision = "turnover";
-            carObj.r = 5;
+        if (curCarSlot in this.roadSlots){
+            var roadX0 = this.roadSlots[curCarSlot].position * 60 + 100,
+                roadX1 = roadX0 + this.roadSlots[curCarSlot].width;
+            if (carX0 < roadX0 || carX1 > roadX1){
+                this.isCollision = true;
+                this.typeCollision = "turnover";
+                carObj.r = 6;
+            }
         }
         
     }

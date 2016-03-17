@@ -9,6 +9,8 @@ class Road {
         this.slotsNumber = roadData.slotsNumber;
         this.slots = this.modifySlots(roadData.slots);
         
+        this.signs = roadData.signs;
+        
         this.texture = roadData.texture;
         this.lTexture = roadData.lTexture;
         
@@ -75,7 +77,7 @@ class Road {
             //drawing road
             for (let i=0; i<7; i++){
                 //drawing road slots
-                let leftPos, slotWidth;
+                let leftPos;
                 
                 if ((this.currentSlot+i) in this.slots){
                     leftPos = 100 + this.slots[(this.currentSlot+i)].position * 60;
@@ -96,6 +98,26 @@ class Road {
                 }else{
                     leftPos = 220;
                     ctx.drawImage(this.img, 0, 0, this.width, this.slotHeight, leftPos, (curSlotY-i*this.slotHeight), this.width, this.slotHeight);
+                }
+                
+                //draw start and finish
+                if ((this.currentSlot+i) == 5){
+                    let signLeftPos = leftPos + (this.slots[(this.currentSlot+i)].width - this.signs.start[2])/2,
+                        signTopPos = curSlotY + (100 - this.signs.start[3])/2;
+                        
+                    ctx.drawImage(this.img, this.signs.start[0], this.signs.start[1],
+                                          this.signs.start[2], this.signs.start[3],
+                                          signLeftPos, (signTopPos-i*this.slotHeight),
+                                          this.signs.start[2], this.signs.start[3]);
+                }
+                if ((this.currentSlot+i) == this.slotsNumber-1){
+                    let signLeftPos = leftPos + (this.slots[(this.currentSlot+i)].width - this.signs.finish[2])/2,
+                        signTopPos = curSlotY + (100 - this.signs.finish[3])/2;
+                        
+                    ctx.drawImage(this.img, this.signs.finish[0], this.signs.finish[1],
+                                          this.signs.finish[2], this.signs.finish[3],
+                                          signLeftPos, (signTopPos-i*this.slotHeight),
+                                          this.signs.finish[2], this.signs.finish[3]);
                 }
             }
         }
